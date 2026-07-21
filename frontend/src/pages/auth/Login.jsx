@@ -14,18 +14,15 @@ const Login = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const isMobile = window.innerWidth < 900;
 
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    // to handleChange for input value
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setError("");
     };
 
-    // to submit the data to login
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -54,11 +51,7 @@ const Login = () => {
     };
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            display: 'flex',
-            background: '#FFFFFF'
-        }}>
+        <div className="authWrap">
             <style>{`
                 @keyframes authKenBurns {
                     0% { transform: scale(1) translate(0, 0); }
@@ -76,124 +69,155 @@ const Login = () => {
                     transform: translateY(-2px);
                     box-shadow: 0 10px 30px rgba(28,25,23,0.35) !important;
                 }
+
+                .authWrap {
+                    min-height: 100vh;
+                    display: flex;
+                    background: #FFFFFF;
+                }
+                .authVisual {
+                    flex: 1 1 55%;
+                    position: relative;
+                    overflow: hidden;
+                    min-height: 100vh;
+                }
+                .authVisualInner {
+                    position: relative;
+                    z-index: 2;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    padding: 48px;
+                }
+                .authForm {
+                    flex: 1 1 45%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 48px;
+                    min-height: 100vh;
+                    background: #FFFFFF;
+                    position: relative;
+                }
+                .authBackLink {
+                    position: absolute;
+                    top: 48px;
+                    right: 48px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #78716C;
+                    text-decoration: none;
+                }
+                .authBadge {
+                    font-size: 2.4rem;
+                }
+
+                @media (max-width: 900px) {
+                    .authWrap {
+                        flex-direction: column;
+                    }
+                    .authVisual {
+                        flex: none;
+                        min-height: 260px;
+                        height: 42vh;
+                    }
+                    .authVisualInner {
+                        padding: 24px;
+                    }
+                    .authVisualInner h2 {
+                        font-size: 1.6rem !important;
+                    }
+                    .authVisualInner p {
+                        font-size: 0.9rem !important;
+                    }
+                    .authForm {
+                        flex: none;
+                        min-height: auto;
+                        padding: 32px 24px 48px;
+                    }
+                    .authBackLink {
+                        top: 24px;
+                        right: 24px;
+                    }
+                }
             `}</style>
 
-            {/* Left Visual Panel */}
-            {!isMobile && (
-                <div style={{
-                    flex: '1 1 55%',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    minHeight: '100vh'
-                }}>
-                    <img
-                        src="/login-bg.jpg"
-                        alt="Modern luxury home exterior at dusk"
-                        style={{
-                            position: 'absolute',
-                            inset: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            animation: 'authKenBurns 20s ease-in-out infinite alternate'
-                        }}
-                    />
-                    <div style={{
+            {/* Visual Panel */}
+            <div className="authVisual">
+                <img
+                    src="/login-bg.jpg"
+                    alt="Modern luxury home exterior at dusk"
+                    style={{
                         position: 'absolute',
                         inset: 0,
-                        background: 'linear-gradient(180deg, rgba(28,25,23,0.55) 0%, rgba(28,25,23,0.15) 35%, rgba(28,25,23,0.75) 100%)'
-                    }} />
-
-                    <div style={{
-                        position: 'relative',
-                        zIndex: 2,
+                        width: '100%',
                         height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        padding: '48px'
-                    }}>
-                        <Logo
-                            style={{ color: '#fff' }}
-                        />
+                        objectFit: 'cover',
+                        animation: 'authKenBurns 20s ease-in-out infinite alternate'
+                    }}
+                />
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(180deg, rgba(28,25,23,0.55) 0%, rgba(28,25,23,0.15) 35%, rgba(28,25,23,0.75) 100%)'
+                }} />
 
-                        <div style={{ maxWidth: '480px' }}>
-                            <span style={{
-                                display: 'inline-block',
-                                padding: '6px 16px',
-                                background: 'rgba(255,255,255,0.12)',
-                                backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(255,255,255,0.25)',
-                                color: '#fff',
-                                borderRadius: '50px',
-                                fontSize: '12px',
-                                fontWeight: '600',
-                                letterSpacing: '1px',
-                                textTransform: 'uppercase',
-                                marginBottom: '20px'
-                            }}>
-                                Welcome Back
-                            </span>
-                            <h2 style={{
-                                fontSize: '2.4rem',
-                                fontWeight: '600',
-                                color: '#fff',
-                                lineHeight: '1.2',
-                                letterSpacing: '-1px',
-                                marginBottom: '16px'
-                            }}>
-                                Pick up right where you left off.
-                            </h2>
-                            <p style={{
-                                fontSize: '1.05rem',
-                                color: 'rgba(255,255,255,0.8)',
-                                lineHeight: '1.7'
-                            }}>
-                                Track your saved homes, message agents, and continue your search across thousands of verified listings.
-                            </p>
-                        </div>
+                <div className="authVisualInner">
+                    <Logo style={{ color: '#fff' }} />
+
+                    <div style={{ maxWidth: '480px' }}>
+                        <span style={{
+                            display: 'inline-block',
+                            padding: '6px 16px',
+                            background: 'rgba(255,255,255,0.12)',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255,255,255,0.25)',
+                            color: '#fff',
+                            borderRadius: '50px',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            letterSpacing: '1px',
+                            textTransform: 'uppercase',
+                            marginBottom: '20px'
+                        }}>
+                            Welcome Back
+                        </span>
+                        <h2 style={{
+                            fontSize: '2.4rem',
+                            fontWeight: '600',
+                            color: '#fff',
+                            lineHeight: '1.2',
+                            letterSpacing: '-1px',
+                            marginBottom: '16px'
+                        }}>
+                            Pick up right where you left off.
+                        </h2>
+                        <p style={{
+                            fontSize: '1.05rem',
+                            color: 'rgba(255,255,255,0.8)',
+                            lineHeight: '1.7'
+                        }}>
+                            Track your saved homes, message agents, and continue your search across thousands of verified listings.
+                        </p>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* Right Form Panel */}
-            <div style={{
-                flex: isMobile ? '1 1 100%' : '1 1 45%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: isMobile ? '32px 24px' : '48px',
-                minHeight: '100vh',
-                background: '#FFFFFF',
-                position: 'relative'
-            }}>
-                {isMobile && (
-                    <div style={{ position: 'absolute', top: '24px', left: '24px' }}>
-                        <Logo fontSize="1.2rem" iconSize={20} />
-                    </div>
-                )}
-
-                <Link to="/" style={{
-                    position: 'absolute',
-                    top: isMobile ? '24px' : '48px',
-                    right: isMobile ? '24px' : '48px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    color: '#78716C',
-                    textDecoration: 'none'
-                }}>
+            {/* Form Panel */}
+            <div className="authForm">
+                <Link to="/" className="authBackLink">
                     <HiArrowLeft size={14} /> Back home
                 </Link>
 
                 <div style={{
                     width: '100%',
                     maxWidth: '400px',
-                    animation: 'authFadeUp 0.7s cubic-bezier(0.16,1,0.3,1)',
-                    marginTop: isMobile ? '48px' : 0
+                    animation: 'authFadeUp 0.7s cubic-bezier(0.16,1,0.3,1)'
                 }}>
                     <h2 style={{
                         fontSize: '1.9rem',
