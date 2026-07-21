@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import API_URL from '../../config.js';
-import banner from '../../assets/bannerimage.png';
 import PropertyCard from '../../components/common/PropertyCard.jsx';
+import Reveal from '../../components/common/Reveal.jsx';
+import Parallax from '../../components/common/Parallax.jsx';
 
 const Landingpage = () => {
 
@@ -253,6 +254,26 @@ const Landingpage = () => {
           70% { transform: scale(2.4); opacity: 0; }
           100% { transform: scale(1); opacity: 0; }
         }
+        @keyframes kenBurns {
+          0% { transform: scale(1) translate(0, 0); }
+          100% { transform: scale(1.18) translate(-1%, -1%); }
+        }
+        @keyframes heroFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes heroTextUp {
+          from { opacity: 0; transform: translateY(50px); filter: blur(6px); }
+          to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes scrollBounce {
+          0%, 100% { transform: translateY(0); opacity: 0.6; }
+          50% { transform: translateY(10px); opacity: 1; }
+        }
+        @keyframes glassShine {
+          0% { background-position: -150% 0; }
+          100% { background-position: 250% 0; }
+        }
 
         /* Animation Classes */
         .animate-fadeInUp {
@@ -416,6 +437,14 @@ const Landingpage = () => {
           .hero-title {
             font-size: 2rem !important;
           }
+          .hero-cinematic-search {
+            flex-direction: column !important;
+            padding: 16px !important;
+            border-radius: 16px !important;
+          }
+          .hero-scroll-indicator {
+            display: none !important;
+          }
           .stats-number {
             font-size: 1.5rem !important;
           }
@@ -454,392 +483,320 @@ const Landingpage = () => {
 
       <Navbar/>
       
-      {/* Hero Section */}
-      <section className={s.heroSection} style={{
-        padding: window.innerWidth < 768 ? '100px 16px 40px' : '120px 20px 60px',
-        background: 'linear-gradient(135deg, #FAF7F1 0%, #F3EEE3 35%, #E8F5F0 70%, #FBF1DE 100%)',
+      {/* Hero Section - Cinematic Video */}
+      <section className="hero-cinematic" style={{
         position: 'relative',
+        minHeight: '100vh',
         overflow: 'hidden',
-        minHeight: window.innerWidth < 768 ? 'auto' : '100vh',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        {/* Animated Background Elements */}
-        <div style={{
+        {/* Background Video */}
+        <Parallax speed={0.1} style={{
           position: 'absolute',
           top: '-10%',
-          right: '-5%',
-          width: window.innerWidth < 768 ? '200px' : '500px',
-          height: window.innerWidth < 768 ? '200px' : '500px',
-          background: 'radial-gradient(circle, rgba(13,148,136,0.12) 0%, rgba(13,148,136,0) 70%)',
-          borderRadius: '50%',
-          animation: 'float 20s ease-in-out infinite'
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '-10%',
-          left: '-5%',
-          width: window.innerWidth < 768 ? '150px' : '400px',
-          height: window.innerWidth < 768 ? '150px' : '400px',
-          background: 'radial-gradient(circle, rgba(194,116,42,0.10) 0%, rgba(194,116,42,0) 70%)',
-          borderRadius: '50%',
-          animation: 'floatReverse 18s ease-in-out infinite'
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '30%',
-          right: '15%',
-          width: window.innerWidth < 768 ? '100px' : '300px',
-          height: window.innerWidth < 768 ? '100px' : '300px',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, rgba(59,130,246,0) 70%)',
-          borderRadius: '50%',
-          animation: 'float 25s ease-in-out infinite 2s'
-        }} />
-
-        <div className="hero-grid" style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: window.innerWidth < 768 ? '1fr' : '1fr 1fr',
-          gap: window.innerWidth < 768 ? '30px' : '60px',
-          alignItems: 'center',
+          left: 0,
           width: '100%',
-          position: 'relative',
-          zIndex: 1
+          height: '120%'
         }}>
-          {/* Hero Content */}
-          <div className="hero-content animate-fadeInLeft" style={{ 
-            paddingRight: window.innerWidth < 768 ? '0' : '20px',
-            textAlign: window.innerWidth < 768 ? 'center' : 'left'
+          <video
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/videos/hero-poster.jpg"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              animation: 'kenBurns 22s ease-in-out infinite alternate',
+              willChange: 'transform'
+            }}
+          >
+            <source src="/videos/hero-realestate.mp4" type="video/mp4" />
+          </video>
+        </Parallax>
+
+        {/* Cinematic Overlay Gradients */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(180deg, rgba(12,10,8,0.65) 0%, rgba(12,10,8,0.35) 38%, rgba(12,10,8,0.55) 70%, rgba(12,10,8,0.88) 100%)'
+        }} />
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%)'
+        }} />
+
+        {/* Content */}
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          maxWidth: '900px',
+          width: '100%',
+          margin: '0 auto',
+          padding: window.innerWidth < 768 ? '110px 20px 60px' : '140px 24px 80px',
+          textAlign: 'center'
+        }}>
+          <span style={{
+            display: 'inline-block',
+            padding: window.innerWidth < 768 ? '6px 14px' : '8px 22px',
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.25)',
+            color: '#fff',
+            borderRadius: '50px',
+            fontSize: window.innerWidth < 768 ? '11px' : '13px',
+            fontWeight: '600',
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            marginBottom: window.innerWidth < 768 ? '20px' : '28px',
+            opacity: 0,
+            animation: 'heroTextUp 1s cubic-bezier(0.16,1,0.3,1) 0.2s forwards'
           }}>
-            <span className="animate-slideDown" style={{
-              display: 'inline-block',
-              padding: window.innerWidth < 768 ? '6px 14px' : '8px 20px',
-              background: 'linear-gradient(135deg, #0d9488, #14b8a6)',
-              color: 'white',
-              borderRadius: '50px',
-              fontSize: window.innerWidth < 768 ? '11px' : '13px',
-              fontWeight: '700',
-              letterSpacing: '0.5px',
-              marginBottom: window.innerWidth < 768 ? '16px' : '24px',
-              boxShadow: '0 4px 15px rgba(13,148,136,0.3)',
-              animation: 'pulseGlow 2s ease-in-out infinite'
-            }}>
-              ⭐ Trusted by 20,000+ homeowners
-            </span>
+            ⭐ Trusted by 20,000+ homeowners
+          </span>
 
-            <h1 className="hero-title lp-serif" style={{
-              fontSize: window.innerWidth < 768 ? 'clamp(1.8rem, 8vw, 2.5rem)' : 'clamp(2.5rem, 6vw, 4.5rem)',
-              fontWeight: '600',
-              color: '#1C1917',
-              lineHeight: '1.08',
-              marginBottom: window.innerWidth < 768 ? '16px' : '20px',
-              letterSpacing: '-1.5px',
-              textAlign: window.innerWidth < 768 ? 'center' : 'left'
-            }}>
-              Find your <span className="shimmer-text" style={{ fontStyle: 'italic', fontWeight: 500 }}>perfect</span> next chapter.
-            </h1>
+          <h1 className="hero-title lp-serif" style={{
+            fontSize: window.innerWidth < 768 ? 'clamp(2rem, 9vw, 2.8rem)' : 'clamp(3rem, 7vw, 5.5rem)',
+            fontWeight: '600',
+            color: '#fff',
+            lineHeight: '1.08',
+            marginBottom: window.innerWidth < 768 ? '20px' : '28px',
+            letterSpacing: '-1.5px',
+            textShadow: '0 4px 40px rgba(0,0,0,0.35)',
+            opacity: 0,
+            animation: 'heroTextUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.4s forwards'
+          }}>
+            Find your <span style={{ fontStyle: 'italic', fontWeight: 500, color: '#5eead4' }}>perfect</span> next chapter.
+          </h1>
 
-            <p style={{
-              fontSize: window.innerWidth < 768 ? '1rem' : '1.2rem',
-              color: '#57534E',
-              lineHeight: '1.8',
-              marginBottom: window.innerWidth < 768 ? '24px' : '32px',
-              maxWidth: window.innerWidth < 768 ? '100%' : '500px',
-              textAlign: window.innerWidth < 768 ? 'center' : 'left'
-            }}>
-              Experience the most advanced real estate search platform. Discover
-              verified listings, connect with top agents, and find a place you will love.
-            </p>
+          <p style={{
+            fontSize: window.innerWidth < 768 ? '1rem' : '1.25rem',
+            color: 'rgba(255,255,255,0.85)',
+            lineHeight: '1.8',
+            marginBottom: window.innerWidth < 768 ? '28px' : '44px',
+            maxWidth: '620px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            opacity: 0,
+            animation: 'heroTextUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.6s forwards'
+          }}>
+            Experience the most advanced real estate search platform. Discover
+            verified listings, connect with top agents, and find a place you will love.
+          </p>
 
-            {/* Search Form */}
-            <form onSubmit={handleSearch} className="search-form" style={{
+          {/* Search Form */}
+          <form onSubmit={handleSearch} className="hero-cinematic-search" style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.12)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: window.innerWidth < 768 ? '16px' : '20px',
+            padding: window.innerWidth < 768 ? '12px' : '10px',
+            border: '1px solid rgba(255,255,255,0.3)',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
+            flexWrap: 'wrap',
+            marginBottom: window.innerWidth < 768 ? '32px' : '48px',
+            transition: 'all 0.3s ease',
+            opacity: 0,
+            animation: 'heroTextUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.8s forwards'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.18)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}>
+            <div className="search-field" style={{
+              flex: '1.2',
               display: 'flex',
               alignItems: 'center',
-              background: 'white',
-              borderRadius: window.innerWidth < 768 ? '16px' : '20px',
-              padding: window.innerWidth < 768 ? '12px' : '8px',
-              boxShadow: '0 20px 60px rgba(28,25,23,0.10)',
-              border: '1px solid rgba(255,255,255,0.5)',
-              flexWrap: 'wrap',
-              marginBottom: window.innerWidth < 768 ? '24px' : '40px',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 25px 70px rgba(28,25,23,0.14)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 20px 60px rgba(28,25,23,0.10)';
-              e.currentTarget.style.transform = 'translateY(0)';
+              gap: window.innerWidth < 768 ? '8px' : '12px',
+              padding: window.innerWidth < 768 ? '8px 12px' : '12px 18px',
+              minWidth: window.innerWidth < 768 ? '100%' : '200px',
+              width: window.innerWidth < 768 ? '100%' : 'auto'
             }}>
-              <div className="search-field" style={{
-                flex: '1.2',
-                display: 'flex',
-                alignItems: 'center',
-                gap: window.innerWidth < 768 ? '8px' : '12px',
-                padding: window.innerWidth < 768 ? '8px 12px' : '12px 16px',
-                minWidth: window.innerWidth < 768 ? '100%' : '200px',
-                width: window.innerWidth < 768 ? '100%' : 'auto'
-              }}>
-                <HiLocationMarker size={window.innerWidth < 768 ? 20 : 24} style={{ color: '#0d9488', flexShrink: 0 }} />
-                <div style={{ flex: 1 }}>
-                  <label style={{
-                    fontSize: '11px',
-                    fontWeight: '700',
-                    color: '#A8A29E',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    display: 'block',
-                    marginBottom: '2px'
-                  }}>Location</label>
-                  <input
-                    type='text'
-                    placeholder='Where are you looking?'
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{
-                      border: 'none',
-                      background: 'transparent',
-                      outline: 'none',
-                      width: '100%',
-                      fontSize: window.innerWidth < 768 ? '14px' : '15px',
-                      fontWeight: '500',
-                      color: '#1C1917',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.color = '#0d9488';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.color = '#1C1917';
-                    }}
-                  />
-                </div>
+              <HiLocationMarker size={window.innerWidth < 768 ? 20 : 22} style={{ color: '#5eead4', flexShrink: 0 }} />
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                <label style={{
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  color: 'rgba(255,255,255,0.6)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  display: 'block',
+                  marginBottom: '2px'
+                }}>Location</label>
+                <input
+                  type='text'
+                  placeholder='Where are you looking?'
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none',
+                    width: '100%',
+                    fontSize: window.innerWidth < 768 ? '14px' : '15px',
+                    fontWeight: '500',
+                    color: '#fff'
+                  }}
+                />
               </div>
+            </div>
 
-              <div className="search-divider" style={{
-                width: '1px',
-                height: '44px',
-                background: '#E7E2D9',
-                opacity: 0.8,
-                display: window.innerWidth < 768 ? 'none' : 'block'
-              }} />
+            <div className="search-divider" style={{
+              width: '1px',
+              height: '40px',
+              background: 'rgba(255,255,255,0.25)',
+              display: window.innerWidth < 768 ? 'none' : 'block'
+            }} />
 
-              <div className="search-field" style={{
-                flex: '1',
-                display: 'flex',
-                alignItems: 'center',
-                gap: window.innerWidth < 768 ? '8px' : '12px',
-                padding: window.innerWidth < 768 ? '8px 12px' : '12px 16px',
-                minWidth: window.innerWidth < 768 ? '100%' : '180px',
-                width: window.innerWidth < 768 ? '100%' : 'auto'
-              }}>
-                <HiHome size={window.innerWidth < 768 ? 20 : 24} style={{ color: '#0d9488', flexShrink: 0 }} />
-                <div style={{ flex: 1 }}>
-                  <label style={{
-                    fontSize: '11px',
-                    fontWeight: '700',
-                    color: '#A8A29E',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    display: 'block',
-                    marginBottom: '2px'
-                  }}>Property Type</label>
-                  <select
-                    value={propertyType}
-                    onChange={(e) => setPropertyType(e.target.value)}
-                    style={{
-                      border: 'none',
-                      background: 'transparent',
-                      outline: 'none',
-                      width: '100%',
-                      fontSize: window.innerWidth < 768 ? '14px' : '15px',
-                      fontWeight: '500',
-                      color: '#1C1917',
-                      cursor: 'pointer',
-                      transition: 'color 0.3s ease'
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.color = '#0d9488';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.color = '#1C1917';
-                    }}
-                  >
-                    <option value="Select Type">Select Type</option>
-                    <option value="flat">Flat/Apartment</option>
-                    <option value="villa">Villa/House</option>
-                    <option value="penthouse">Penthouse</option>
-                    <option value="commercial">Commercial</option>
-                  </select>
-                </div>
-              </div>
-
-              <button type='submit' style={{
-                padding: window.innerWidth < 768 ? '14px 24px' : '16px 32px',
-                background: 'linear-gradient(135deg, #0d9488, #0f766e)',
-                border: 'none',
-                borderRadius: window.innerWidth < 768 ? '12px' : '16px',
-                color: 'white',
-                fontWeight: '700',
-                fontSize: window.innerWidth < 768 ? '14px' : '16px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                width: window.innerWidth < 768 ? '100%' : 'auto',
-                justifyContent: 'center',
-                boxShadow: '0 4px 20px rgba(13,148,136,0.3)',
-                marginTop: window.innerWidth < 768 ? '8px' : '0',
-                transition: 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow = '0 8px 35px rgba(13,148,136,0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(13,148,136,0.3)';
-              }}>
-                <HiSearch size={window.innerWidth < 768 ? 18 : 22} /> Search
-              </button>
-            </form>
-
-            {/* Stats */}
-            <div className="stats-flex" style={{
+            <div className="search-field" style={{
+              flex: '1',
               display: 'flex',
-              gap: window.innerWidth < 768 ? '20px' : '50px',
-              flexWrap: 'wrap',
-              justifyContent: window.innerWidth < 768 ? 'center' : 'flex-start'
+              alignItems: 'center',
+              gap: window.innerWidth < 768 ? '8px' : '12px',
+              padding: window.innerWidth < 768 ? '8px 12px' : '12px 18px',
+              minWidth: window.innerWidth < 768 ? '100%' : '180px',
+              width: window.innerWidth < 768 ? '100%' : 'auto'
             }}>
-              {[
-                { number: '12k+', label: 'Ready Properties', delay: '0s' },
-                { number: '500+', label: 'Agent Network', delay: '0.1s' },
-                { number: '4.9/5', label: 'User Rating', delay: '0.2s' }
-              ].map((stat, idx) => (
-                <div key={idx} style={{
-                  animation: `fadeInUp 0.6s ease-out ${stat.delay}`,
-                  opacity: 0,
-                  animationFillMode: 'forwards',
-                  textAlign: 'center'
-                }}>
-                  <h3 className="stats-number lp-serif" style={{
-                    fontSize: window.innerWidth < 768 ? '1.5rem' : '2rem',
-                    fontWeight: '600',
-                    background: 'linear-gradient(135deg, #0d9488, #0f766e)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
-                  }}>{stat.number}</h3>
-                  <p style={{
-                    fontSize: window.innerWidth < 768 ? '0.7rem' : '0.85rem',
-                    color: '#A8A29E',
-                    fontWeight: '600',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
-                  }}>{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Hero Image - Hidden on Mobile */}
-          <div className="hero-image animate-fadeInRight" style={{ 
-            position: 'relative',
-            display: window.innerWidth < 768 ? 'none' : 'block'
-          }}>
-            <div style={{
-              borderRadius: '30px',
-              overflow: 'hidden',
-              boxShadow: '0 30px 80px rgba(28,25,23,0.18)',
-              transform: 'perspective(1000px) rotateY(-3deg)',
-              transition: 'transform 0.6s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'perspective(1000px) rotateY(0deg)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'perspective(1000px) rotateY(-3deg)';
-            }}>
-              <img src={banner} alt='banner' style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                transition: 'transform 0.5s ease'
-              }}
-              onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
-              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'} />
-
-              <div className="animate-float" style={{
-                position: 'absolute',
-                bottom: window.innerWidth < 768 ? '16px' : '30px',
-                left: window.innerWidth < 768 ? '16px' : '30px',
-                right: window.innerWidth < 768 ? '16px' : 'auto',
-                background: 'rgba(255,255,255,0.95)',
-                backdropFilter: 'blur(12px)',
-                borderRadius: window.innerWidth < 768 ? '14px' : '20px',
-                padding: window.innerWidth < 768 ? '14px 16px' : '20px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: window.innerWidth < 768 ? '12px' : '16px',
-                boxShadow: '0 10px 40px rgba(28,25,23,0.12)',
-                flexWrap: window.innerWidth < 768 ? 'wrap' : 'nowrap'
-              }}>
-                <div style={{
-                  width: window.innerWidth < 768 ? '36px' : '48px',
-                  height: window.innerWidth < 768 ? '36px' : '48px',
-                  background: 'linear-gradient(135deg, #0d9488, #14b8a6)',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 15px rgba(13,148,136,0.3)'
-                }}>
-                  <HiShieldCheck size={window.innerWidth < 768 ? 18 : 24} color="white" />
-                </div>
-                <div>
-                  <h4 className="badge-text" style={{ fontSize: window.innerWidth < 768 ? '13px' : '16px', fontWeight: '700', color: '#1C1917', margin: 0 }}>Verified Listing</h4>
-                  <p style={{ fontSize: window.innerWidth < 768 ? '11px' : '13px', color: '#78716C', margin: 0 }}>Inspected by our team</p>
-                </div>
-                <span style={{
-                  padding: window.innerWidth < 768 ? '2px 10px' : '4px 14px',
-                  background: 'linear-gradient(135deg, #C2742A, #A85D1F)',
-                  borderRadius: '30px',
-                  color: 'white',
-                  fontSize: window.innerWidth < 768 ? '9px' : '11px',
-                  fontWeight: '700'
-                }}>Pre-Approved</span>
+              <HiHome size={window.innerWidth < 768 ? 20 : 22} style={{ color: '#5eead4', flexShrink: 0 }} />
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                <label style={{
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  color: 'rgba(255,255,255,0.6)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  display: 'block',
+                  marginBottom: '2px'
+                }}>Property Type</label>
+                <select
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none',
+                    width: '100%',
+                    fontSize: window.innerWidth < 768 ? '14px' : '15px',
+                    fontWeight: '500',
+                    color: '#fff',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="Select Type" style={{ color: '#1C1917' }}>Select Type</option>
+                  <option value="flat" style={{ color: '#1C1917' }}>Flat/Apartment</option>
+                  <option value="villa" style={{ color: '#1C1917' }}>Villa/House</option>
+                  <option value="penthouse" style={{ color: '#1C1917' }}>Penthouse</option>
+                  <option value="commercial" style={{ color: '#1C1917' }}>Commercial</option>
+                </select>
               </div>
             </div>
 
-            {/* Floating Badge */}
-            <div style={{
-              position: 'absolute',
-              top: '-20px',
-              right: '-20px',
-              background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-              borderRadius: '16px',
-              padding: '12px 20px',
+            <button type='submit' style={{
+              padding: window.innerWidth < 768 ? '14px 24px' : '16px 34px',
+              background: 'linear-gradient(135deg, #0d9488, #0f766e)',
+              border: 'none',
+              borderRadius: window.innerWidth < 768 ? '12px' : '14px',
               color: 'white',
-              fontSize: '14px',
               fontWeight: '700',
-              boxShadow: '0 10px 30px rgba(139,92,246,0.35)',
-              animation: 'float 8s ease-in-out infinite 1s'
+              fontSize: window.innerWidth < 768 ? '14px' : '16px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              width: window.innerWidth < 768 ? '100%' : 'auto',
+              justifyContent: 'center',
+              boxShadow: '0 4px 25px rgba(13,148,136,0.5)',
+              marginTop: window.innerWidth < 768 ? '8px' : '0',
+              transition: 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 8px 35px rgba(13,148,136,0.6)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow = '0 4px 25px rgba(13,148,136,0.5)';
             }}>
-              🏆 Premium
-            </div>
+              <HiSearch size={window.innerWidth < 768 ? 18 : 22} /> Search
+            </button>
+          </form>
+
+          {/* Stats */}
+          <div className="stats-flex" style={{
+            display: 'flex',
+            gap: window.innerWidth < 768 ? '24px' : '60px',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            opacity: 0,
+            animation: 'heroTextUp 1.1s cubic-bezier(0.16,1,0.3,1) 1s forwards'
+          }}>
+            {[
+              { number: '12k+', label: 'Ready Properties' },
+              { number: '500+', label: 'Agent Network' },
+              { number: '4.9/5', label: 'User Rating' }
+            ].map((stat, idx) => (
+              <div key={idx} style={{ textAlign: 'center' }}>
+                <h3 className="stats-number lp-serif" style={{
+                  fontSize: window.innerWidth < 768 ? '1.5rem' : '2.1rem',
+                  fontWeight: '600',
+                  color: '#fff'
+                }}>{stat.number}</h3>
+                <p style={{
+                  fontSize: window.innerWidth < 768 ? '0.7rem' : '0.85rem',
+                  color: 'rgba(255,255,255,0.65)',
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>{stat.label}</p>
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="hero-scroll-indicator" style={{
+          position: 'absolute',
+          bottom: '32px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          color: 'rgba(255,255,255,0.75)',
+          animation: 'scrollBounce 2s ease-in-out infinite'
+        }}>
+          <span style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Scroll</span>
+          <svg width="18" height="28" viewBox="0 0 18 28" fill="none">
+            <rect x="1" y="1" width="16" height="26" rx="8" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5"/>
+            <circle cx="9" cy="8" r="2.5" fill="#5eead4"/>
+          </svg>
         </div>
       </section>
 
-      {/* Category Section */}
+      
+{/* Category Section */}
       <section className={s.categorySection} style={{
         padding: window.innerWidth < 768 ? '60px 16px' : '80px 20px',
         background: '#FFFFFF',
         position: 'relative'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
+          <Reveal style={{
             textAlign: 'center',
             marginBottom: window.innerWidth < 768 ? '40px' : '60px'
           }}>
@@ -871,7 +828,7 @@ const Landingpage = () => {
             }}>
               Explore curated collections of properties tailored to your lifestyle.
             </p>
-          </div>
+          </Reveal>
 
           <div className="category-grid" style={{
             display: 'grid',
@@ -879,63 +836,61 @@ const Landingpage = () => {
             gap: window.innerWidth < 768 ? '12px' : '24px'
           }}>
             {categories.map((cat, idx) => (
-              <div 
-                key={idx}
-                className="card-hover"
-                onClick={() => navigate(`/properties?type=${cat.type}`)}
-                style={{
-                  background: 'white',
-                  borderRadius: window.innerWidth < 768 ? '14px' : '20px',
-                  padding: window.innerWidth < 768 ? '24px 12px' : '40px 20px',
-                  textAlign: 'center',
-                  border: '1.5px solid #EFEBE3',
-                  boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
-                  animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s`,
-                  opacity: 0,
-                  animationFillMode: 'forwards',
-                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(28,25,23,0.10)';
-                  e.currentTarget.style.borderColor = '#0d9488';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 10px rgba(28,25,23,0.04)';
-                  e.currentTarget.style.borderColor = '#EFEBE3';
-                }}
-              >
-                <div style={{
-                  width: window.innerWidth < 768 ? '56px' : '70px',
-                  height: window.innerWidth < 768 ? '56px' : '70px',
-                  margin: '0 auto 16px',
-                  background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
-                  borderRadius: window.innerWidth < 768 ? '14px' : '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#0d9488',
-                  fontSize: window.innerWidth < 768 ? '24px' : '32px',
-                  transition: 'transform 0.3s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
-                  {cat.icon}
+              <Reveal key={idx} delay={idx * 0.1} distance={30} scale>
+                <div
+                  className="card-hover"
+                  onClick={() => navigate(`/properties?type=${cat.type}`)}
+                  style={{
+                    background: 'white',
+                    borderRadius: window.innerWidth < 768 ? '14px' : '20px',
+                    padding: window.innerWidth < 768 ? '24px 12px' : '40px 20px',
+                    textAlign: 'center',
+                    border: '1.5px solid #EFEBE3',
+                    boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-8px)';
+                    e.currentTarget.style.boxShadow = '0 12px 40px rgba(28,25,23,0.10)';
+                    e.currentTarget.style.borderColor = '#0d9488';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(28,25,23,0.04)';
+                    e.currentTarget.style.borderColor = '#EFEBE3';
+                  }}
+                >
+                  <div style={{
+                    width: window.innerWidth < 768 ? '56px' : '70px',
+                    height: window.innerWidth < 768 ? '56px' : '70px',
+                    margin: '0 auto 16px',
+                    background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
+                    borderRadius: window.innerWidth < 768 ? '14px' : '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#0d9488',
+                    fontSize: window.innerWidth < 768 ? '24px' : '32px',
+                    transition: 'transform 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                    {cat.icon}
+                  </div>
+                  <h3 style={{
+                    fontSize: window.innerWidth < 768 ? '0.9rem' : '1.2rem',
+                    fontWeight: '700',
+                    color: '#1C1917',
+                    marginBottom: window.innerWidth < 768 ? '2px' : '6px'
+                  }}>{cat.name}</h3>
+                  <p style={{
+                    fontSize: window.innerWidth < 768 ? '0.7rem' : '0.9rem',
+                    color: '#A8A29E'
+                  }}>
+                    {cat.count.toLocaleString()} Properties
+                  </p>
                 </div>
-                <h3 style={{
-                  fontSize: window.innerWidth < 768 ? '0.9rem' : '1.2rem',
-                  fontWeight: '700',
-                  color: '#1C1917',
-                  marginBottom: window.innerWidth < 768 ? '2px' : '6px'
-                }}>{cat.name}</h3>
-                <p style={{
-                  fontSize: window.innerWidth < 768 ? '0.7rem' : '0.9rem',
-                  color: '#A8A29E'
-                }}>
-                  {cat.count.toLocaleString()} Properties
-                </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -948,16 +903,21 @@ const Landingpage = () => {
         position: 'relative',
         overflow: 'hidden'
       }}>
-        <div style={{
+        <Parallax speed={-0.12} style={{
           position: 'absolute',
           top: '-30%',
           right: '-10%',
           width: window.innerWidth < 768 ? '200px' : '600px',
-          height: window.innerWidth < 768 ? '200px' : '600px',
-          background: 'radial-gradient(circle, rgba(13,148,136,0.06) 0%, rgba(13,148,136,0) 70%)',
-          borderRadius: '50%',
-          animation: 'float 25s ease-in-out infinite'
-        }} />
+          height: window.innerWidth < 768 ? '200px' : '600px'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '100%',
+            background: 'radial-gradient(circle, rgba(13,148,136,0.06) 0%, rgba(13,148,136,0) 70%)',
+            borderRadius: '50%',
+            animation: 'float 25s ease-in-out infinite'
+          }} />
+        </Parallax>
 
         <div style={{
           maxWidth: '1200px',
@@ -975,50 +935,48 @@ const Landingpage = () => {
             gap: window.innerWidth < 768 ? '16px' : '24px'
           }}>
             {features.map((f, idx) => (
-              <div
-                key={idx}
-                className="card-hover"
-                style={{
-                  background: 'white',
-                  borderRadius: window.innerWidth < 768 ? '12px' : '16px',
-                  padding: window.innerWidth < 768 ? '18px 16px' : '28px 24px',
-                  boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
-                  border: '1.5px solid #EFEBE3',
-                  animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s`,
-                  opacity: 0,
-                  animationFillMode: 'forwards'
-                }}
-              >
-                <div style={{
-                  width: window.innerWidth < 768 ? '40px' : '48px',
-                  height: window.innerWidth < 768 ? '40px' : '48px',
-                  marginBottom: window.innerWidth < 768 ? '12px' : '16px',
-                  background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#0d9488',
-                  fontSize: window.innerWidth < 768 ? '20px' : '24px'
-                }}>
-                  {f.icon}
+              <Reveal key={idx} delay={idx * 0.1} distance={30}>
+                <div
+                  className="card-hover"
+                  style={{
+                    background: 'white',
+                    borderRadius: window.innerWidth < 768 ? '12px' : '16px',
+                    padding: window.innerWidth < 768 ? '18px 16px' : '28px 24px',
+                    boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
+                    border: '1.5px solid #EFEBE3'
+                  }}
+                >
+                  <div style={{
+                    width: window.innerWidth < 768 ? '40px' : '48px',
+                    height: window.innerWidth < 768 ? '40px' : '48px',
+                    marginBottom: window.innerWidth < 768 ? '12px' : '16px',
+                    background: 'linear-gradient(135deg, #ECFDF5, #D1FAE5)',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#0d9488',
+                    fontSize: window.innerWidth < 768 ? '20px' : '24px'
+                  }}>
+                    {f.icon}
+                  </div>
+                  <h3 style={{
+                    fontSize: window.innerWidth < 768 ? '0.95rem' : '1.1rem',
+                    fontWeight: '700',
+                    color: '#1C1917',
+                    marginBottom: window.innerWidth < 768 ? '4px' : '8px'
+                  }}>{f.title}</h3>
+                  <p style={{
+                    fontSize: window.innerWidth < 768 ? '0.8rem' : '0.9rem',
+                    color: '#78716C',
+                    lineHeight: '1.6'
+                  }}>{f.desc}</p>
                 </div>
-                <h3 style={{
-                  fontSize: window.innerWidth < 768 ? '0.95rem' : '1.1rem',
-                  fontWeight: '700',
-                  color: '#1C1917',
-                  marginBottom: window.innerWidth < 768 ? '4px' : '8px'
-                }}>{f.title}</h3>
-                <p style={{
-                  fontSize: window.innerWidth < 768 ? '0.8rem' : '0.9rem',
-                  color: '#78716C',
-                  lineHeight: '1.6'
-                }}>{f.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
 
-          <div className="animate-fadeInRight">
+          <Reveal direction="right" distance={40}>
             <span className="animate-slideDown" style={{
               display: 'inline-block',
               padding: window.innerWidth < 768 ? '4px 12px' : '6px 16px',
@@ -1062,15 +1020,12 @@ const Landingpage = () => {
                 "Secure document management system",
                 "24/7 Premium customer support"
               ].map((item, idx) => (
-                <li key={idx} style={{
+                <Reveal key={idx} as="li" direction="left" delay={idx * 0.1} distance={24} style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: window.innerWidth < 768 ? '8px' : '12px',
                   fontSize: window.innerWidth < 768 ? '0.85rem' : '0.95rem',
-                  color: '#44403C',
-                  animation: `fadeInLeft 0.6s ease-out ${idx * 0.1}s`,
-                  opacity: 0,
-                  animationFillMode: 'forwards'
+                  color: '#44403C'
                 }}>
                   <span style={{
                     width: window.innerWidth < 768 ? '20px' : '24px',
@@ -1086,7 +1041,7 @@ const Landingpage = () => {
                     flexShrink: 0
                   }}>✓</span>
                   {item}
-                </li>
+                </Reveal>
               ))}
             </ul>
             <a href='#process' style={{
@@ -1109,7 +1064,7 @@ const Landingpage = () => {
             }}>
               Learn more about our process →
             </a>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -1120,7 +1075,7 @@ const Landingpage = () => {
         position: 'relative'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
+          <Reveal style={{
             textAlign: 'center',
             marginBottom: window.innerWidth < 768 ? '40px' : '60px'
           }}>
@@ -1152,7 +1107,7 @@ const Landingpage = () => {
             }}>
               We've simplified finding your dream home into three clear steps.
             </p>
-          </div>
+          </Reveal>
 
           <div className="process-grid" style={{
             display: 'grid',
@@ -1195,69 +1150,67 @@ const Landingpage = () => {
                 color: '#C2742A'
               }
             ].map((p, idx) => (
-              <div
-                key={idx}
-                className="card-hover"
-                style={{
-                  background: 'white',
-                  borderRadius: window.innerWidth < 768 ? '16px' : '24px',
-                  padding: window.innerWidth < 768 ? '28px 20px' : '40px 32px',
-                  textAlign: 'center',
-                  border: '1.5px solid #EFEBE3',
-                  boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
-                  position: 'relative',
-                  animation: `fadeInUp 0.6s ease-out ${idx * 0.15}s`,
-                  opacity: 0,
-                  animationFillMode: 'forwards'
-                }}
-              >
-                <div style={{
-                  position: 'absolute',
-                  top: '-16px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: window.innerWidth < 768 ? '36px' : '44px',
-                  height: window.innerWidth < 768 ? '36px' : '44px',
-                  background: `linear-gradient(135deg, ${p.color}, ${p.color}dd)`,
-                  borderRadius: window.innerWidth < 768 ? '10px' : '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontSize: window.innerWidth < 768 ? '14px' : '18px',
-                  fontWeight: '800',
-                  boxShadow: `0 4px 20px ${p.color}40`
-                }}>
-                  {p.step}
-                </div>
+              <Reveal key={idx} delay={idx * 0.15} distance={40} scale>
+                <div
+                  className="card-hover"
+                  style={{
+                    background: 'white',
+                    borderRadius: window.innerWidth < 768 ? '16px' : '24px',
+                    padding: window.innerWidth < 768 ? '28px 20px' : '40px 32px',
+                    textAlign: 'center',
+                    border: '1.5px solid #EFEBE3',
+                    boxShadow: '0 2px 10px rgba(28,25,23,0.04)',
+                    position: 'relative'
+                  }}
+                >
+                  <div style={{
+                    position: 'absolute',
+                    top: '-16px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: window.innerWidth < 768 ? '36px' : '44px',
+                    height: window.innerWidth < 768 ? '36px' : '44px',
+                    background: `linear-gradient(135deg, ${p.color}, ${p.color}dd)`,
+                    borderRadius: window.innerWidth < 768 ? '10px' : '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'white',
+                    fontSize: window.innerWidth < 768 ? '14px' : '18px',
+                    fontWeight: '800',
+                    boxShadow: `0 4px 20px ${p.color}40`
+                  }}>
+                    {p.step}
+                  </div>
 
-                <div style={{
-                  width: window.innerWidth < 768 ? '52px' : '64px',
-                  height: window.innerWidth < 768 ? '52px' : '64px',
-                  margin: window.innerWidth < 768 ? '16px auto 16px' : '20px auto 20px',
-                  background: `linear-gradient(135deg, ${p.color}15, ${p.color}08)`,
-                  borderRadius: window.innerWidth < 768 ? '14px' : '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: p.color,
-                  fontSize: window.innerWidth < 768 ? '24px' : '32px'
-                }}>
-                  {p.icon}
-                </div>
+                  <div style={{
+                    width: window.innerWidth < 768 ? '52px' : '64px',
+                    height: window.innerWidth < 768 ? '52px' : '64px',
+                    margin: window.innerWidth < 768 ? '16px auto 16px' : '20px auto 20px',
+                    background: `linear-gradient(135deg, ${p.color}15, ${p.color}08)`,
+                    borderRadius: window.innerWidth < 768 ? '14px' : '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: p.color,
+                    fontSize: window.innerWidth < 768 ? '24px' : '32px'
+                  }}>
+                    {p.icon}
+                  </div>
 
-                <h3 style={{
-                  fontSize: window.innerWidth < 768 ? '1rem' : '1.3rem',
-                  fontWeight: '700',
-                  color: '#1C1917',
-                  marginBottom: window.innerWidth < 768 ? '8px' : '12px'
-                }}>{p.title}</h3>
-                <p style={{
-                  fontSize: window.innerWidth < 768 ? '0.85rem' : '0.95rem',
-                  color: '#78716C',
-                  lineHeight: window.innerWidth < 768 ? '1.5' : '1.7'
-                }}>{p.desc}</p>
-              </div>
+                  <h3 style={{
+                    fontSize: window.innerWidth < 768 ? '1rem' : '1.3rem',
+                    fontWeight: '700',
+                    color: '#1C1917',
+                    marginBottom: window.innerWidth < 768 ? '8px' : '12px'
+                  }}>{p.title}</h3>
+                  <p style={{
+                    fontSize: window.innerWidth < 768 ? '0.85rem' : '0.95rem',
+                    color: '#78716C',
+                    lineHeight: window.innerWidth < 768 ? '1.5' : '1.7'
+                  }}>{p.desc}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -1270,7 +1223,7 @@ const Landingpage = () => {
         position: 'relative'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
+          <Reveal style={{
             textAlign: 'center',
             marginBottom: window.innerWidth < 768 ? '40px' : '60px'
           }}>
@@ -1302,7 +1255,7 @@ const Landingpage = () => {
             }}>
               Discover high-value properties curated by our experts.
             </p>
-          </div>
+          </Reveal>
 
           {loading ? (
             <div style={{
@@ -1338,23 +1291,21 @@ const Landingpage = () => {
                 .filter((p) => p)
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .slice(0, 6)
-                .map((property) => (
-                  <div key={property._id} className="card-hover" style={{
-                    animation: 'fadeInUp 0.6s ease-out',
-                    opacity: 0,
-                    animationFillMode: 'forwards'
-                  }}>
-                    <PropertyCard
-                      property={property}
-                      isWishlisted={wishlistedIds.includes(String(property._id))}
-                      onToggleWishlist={handleToggleWishlist}
-                    />
-                  </div>
+                .map((property, idx) => (
+                  <Reveal key={property._id} delay={(idx % 3) * 0.12} distance={34} scale>
+                    <div className="card-hover">
+                      <PropertyCard
+                        property={property}
+                        isWishlisted={wishlistedIds.includes(String(property._id))}
+                        onToggleWishlist={handleToggleWishlist}
+                      />
+                    </div>
+                  </Reveal>
                 ))}
             </div>
           )}
 
-          <div style={{
+          <Reveal style={{
             textAlign: 'center',
             marginTop: window.innerWidth < 768 ? '40px' : '60px'
           }}>
@@ -1381,7 +1332,7 @@ const Landingpage = () => {
             }}>
               Discover More Properties →
             </button>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -1394,16 +1345,21 @@ const Landingpage = () => {
         overflow: 'hidden',
         marginTop: 'auto'
       }}>
-        <div style={{
+        <Parallax speed={-0.1} style={{
           position: 'absolute',
           top: '-30%',
           right: '-10%',
           width: window.innerWidth < 768 ? '200px' : '600px',
-          height: window.innerWidth < 768 ? '200px' : '600px',
-          background: 'radial-gradient(circle, rgba(13,148,136,0.07) 0%, rgba(13,148,136,0) 70%)',
-          borderRadius: '50%',
-          animation: 'float 30s ease-in-out infinite'
-        }} />
+          height: window.innerWidth < 768 ? '200px' : '600px'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '100%',
+            background: 'radial-gradient(circle, rgba(13,148,136,0.07) 0%, rgba(13,148,136,0) 70%)',
+            borderRadius: '50%',
+            animation: 'float 30s ease-in-out infinite'
+          }} />
+        </Parallax>
 
         <div style={{
           maxWidth: '1200px',
@@ -1411,7 +1367,7 @@ const Landingpage = () => {
           position: 'relative',
           zIndex: 1
         }}>
-          <div className="footer-grid" style={{
+          <Reveal as="div" className="footer-grid" distance={30} style={{
             display: 'grid',
             gridTemplateColumns: window.innerWidth < 768 ? '1fr' : 'repeat(auto-fit, minmax(220px, 1fr))',
             gap: window.innerWidth < 768 ? '30px' : '40px',
@@ -1594,7 +1550,7 @@ const Landingpage = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </Reveal>
 
           <div style={{
             borderTop: '1px solid rgba(255,255,255,0.08)',
