@@ -31,12 +31,12 @@ const sendEmail = async (option) => {
             console.log("Email sent successfully via Brevo:", result.messageId);
         } else {
             console.error("Brevo API Error:", result);
-            throw new Error(result.message || "Could not send email via Brevo"); // ✅ Error not error
+            throw new Error(result.message || "Could not send email via Brevo");
         }
 
     } catch(error) {
-        console.error("Brevo Email Error:", err.message); // ✅ was result (not defined here)
-        throw new Error("Could not send email via Brevo");  // ✅ Error not error
+        console.error("Brevo Email Error:", error.message);
+        throw new Error("Could not send email via Brevo");
     }
 };
 
