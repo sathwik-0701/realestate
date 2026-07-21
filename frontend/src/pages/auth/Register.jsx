@@ -17,7 +17,6 @@ const Register = () => {
     const [success, setSuccess] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const isMobile = window.innerWidth < 900;
 
     const {register} = useAuth();
     const navigate = useNavigate();
@@ -50,11 +49,7 @@ const Register = () => {
     };
 
   return (
-    <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        background: '#FFFFFF'
-    }}>
+    <div className="authWrap2">
         <style>{`
             @keyframes authKenBurns2 {
                 0% { transform: scale(1) translate(0, 0); }
@@ -75,47 +70,95 @@ const Register = () => {
             .role-card {
                 transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
             }
+
+            .authWrap2 {
+                min-height: 100vh;
+                display: flex;
+                background: #FFFFFF;
+            }
+            .authForm2 {
+                flex: 1 1 45%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 48px;
+                min-height: 100vh;
+                background: #FFFFFF;
+                position: relative;
+                order: 1;
+            }
+            .authVisual2 {
+                flex: 1 1 55%;
+                position: relative;
+                overflow: hidden;
+                min-height: 100vh;
+                order: 2;
+            }
+            .authVisualInner2 {
+                position: relative;
+                z-index: 2;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 48px;
+            }
+            .authBackLink2 {
+                position: absolute;
+                top: 48px;
+                right: 48px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #78716C;
+                text-decoration: none;
+            }
+
+            @media (max-width: 900px) {
+                .authWrap2 {
+                    flex-direction: column;
+                }
+                .authVisual2 {
+                    flex: none;
+                    min-height: 260px;
+                    height: 42vh;
+                    order: 1;
+                }
+                .authVisualInner2 {
+                    padding: 24px;
+                }
+                .authVisualInner2 h2 {
+                    font-size: 1.6rem !important;
+                }
+                .authVisualInner2 p {
+                    font-size: 0.9rem !important;
+                }
+                .authForm2 {
+                    flex: none;
+                    min-height: auto;
+                    padding: 32px 24px 48px;
+                    order: 2;
+                }
+                .authBackLink2 {
+                    top: 24px;
+                    right: 24px;
+                }
+            }
         `}</style>
 
-        {/* Left Form Panel */}
-        <div style={{
-            flex: isMobile ? '1 1 100%' : '1 1 45%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: isMobile ? '32px 24px' : '48px',
-            minHeight: '100vh',
-            background: '#FFFFFF',
-            position: 'relative',
-            order: isMobile ? 2 : 1
-        }}>
-            {isMobile && (
-                <div style={{ position: 'absolute', top: '24px', left: '24px' }}>
-                    <Logo fontSize="1.2rem" iconSize={20} />
-                </div>
-            )}
-
-            <Link to="/" style={{
-                position: 'absolute',
-                top: isMobile ? '24px' : '48px',
-                right: isMobile ? '24px' : '48px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: '#78716C',
-                textDecoration: 'none'
-            }}>
+        {/* Form Panel */}
+        <div className="authForm2">
+            <Link to="/" className="authBackLink2">
                 <HiArrowLeft size={14} /> Back home
             </Link>
 
             <div style={{
                 width: '100%',
                 maxWidth: '400px',
-                animation: 'authFadeUp2 0.7s cubic-bezier(0.16,1,0.3,1)',
-                marginTop: isMobile ? '48px' : 0
+                animation: 'authFadeUp2 0.7s cubic-bezier(0.16,1,0.3,1)'
             }}>
                 <h2 style={{
                     fontSize: '1.9rem',
@@ -364,84 +407,68 @@ const Register = () => {
             </div>
         </div>
 
-        {/* Right Visual Panel */}
-        {!isMobile && (
-            <div style={{
-                flex: '1 1 55%',
-                position: 'relative',
-                overflow: 'hidden',
-                minHeight: '100vh',
-                order: 2
-            }}>
-                <img
-                    src="/register-bg.jpg"
-                    alt="Elegant two-story home at twilight"
-                    style={{
-                        position: 'absolute',
-                        inset: 0,
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        animation: 'authKenBurns2 20s ease-in-out infinite alternate'
-                    }}
-                />
-                <div style={{
+        {/* Visual Panel */}
+        <div className="authVisual2">
+            <img
+                src="/register-bg.jpg"
+                alt="Elegant two-story home at twilight"
+                style={{
                     position: 'absolute',
                     inset: 0,
-                    background: 'linear-gradient(180deg, rgba(28,25,23,0.55) 0%, rgba(28,25,23,0.15) 35%, rgba(28,25,23,0.75) 100%)'
-                }} />
-
-                <div style={{
-                    position: 'relative',
-                    zIndex: 2,
+                    width: '100%',
                     height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    padding: '48px'
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Logo style={{ color: '#fff' }} />
-                    </div>
+                    objectFit: 'cover',
+                    animation: 'authKenBurns2 20s ease-in-out infinite alternate'
+                }}
+            />
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(180deg, rgba(28,25,23,0.55) 0%, rgba(28,25,23,0.15) 35%, rgba(28,25,23,0.75) 100%)'
+            }} />
 
-                    <div style={{ maxWidth: '480px', marginLeft: 'auto', textAlign: 'right' }}>
-                        <span style={{
-                            display: 'inline-block',
-                            padding: '6px 16px',
-                            background: 'rgba(255,255,255,0.12)',
-                            backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(255,255,255,0.25)',
-                            color: '#fff',
-                            borderRadius: '50px',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            letterSpacing: '1px',
-                            textTransform: 'uppercase',
-                            marginBottom: '20px'
-                        }}>
-                            Join Us
-                        </span>
-                        <h2 style={{
-                            fontSize: '2.4rem',
-                            fontWeight: '600',
-                            color: '#fff',
-                            lineHeight: '1.2',
-                            letterSpacing: '-1px',
-                            marginBottom: '16px'
-                        }}>
-                            Start your search for the perfect home.
-                        </h2>
-                        <p style={{
-                            fontSize: '1.05rem',
-                            color: 'rgba(255,255,255,0.8)',
-                            lineHeight: '1.7'
-                        }}>
-                            Create a free account to save listings, chat with sellers, and get alerts on new properties.
-                        </p>
-                    </div>
+            <div className="authVisualInner2">
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Logo style={{ color: '#fff' }} />
+                </div>
+
+                <div style={{ maxWidth: '480px', marginLeft: 'auto', textAlign: 'right' }}>
+                    <span style={{
+                        display: 'inline-block',
+                        padding: '6px 16px',
+                        background: 'rgba(255,255,255,0.12)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255,255,255,0.25)',
+                        color: '#fff',
+                        borderRadius: '50px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase',
+                        marginBottom: '20px'
+                    }}>
+                        Join Us
+                    </span>
+                    <h2 style={{
+                        fontSize: '2.4rem',
+                        fontWeight: '600',
+                        color: '#fff',
+                        lineHeight: '1.2',
+                        letterSpacing: '-1px',
+                        marginBottom: '16px'
+                    }}>
+                        Start your search for the perfect home.
+                    </h2>
+                    <p style={{
+                        fontSize: '1.05rem',
+                        color: 'rgba(255,255,255,0.8)',
+                        lineHeight: '1.7'
+                    }}>
+                        Create a free account to save listings, chat with sellers, and get alerts on new properties.
+                    </p>
                 </div>
             </div>
-        )}
+        </div>
     </div>
   );
 }
