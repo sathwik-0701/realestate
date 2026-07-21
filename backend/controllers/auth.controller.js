@@ -1,11 +1,10 @@
 import User from "../models/user.model.js";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 import sendEmail from "../utils/sendEmail.js";
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 
-//Register
-
+// Register
 export const register = async (req, res) => {
     try {
         const {name, email, password, role} = req.body;
@@ -34,12 +33,10 @@ export const register = async (req, res) => {
                 email,
                 subject: "Verify Your Email  -  Real Estate Platform",
                 message: `<p>Your email verfication code is: <strong>${verificationToken}</strong></p><p>Please enter code on the verfication page to activate your account</p>`
-
             });
         }
         catch (emailError) {
             console.error("Failed to send verification email:", emailError);
-            // we will still create user
         }
         res.status(201).json({
             message: "User registered. Please check your email for the verification code.",
@@ -48,17 +45,16 @@ export const register = async (req, res) => {
                 name: user.name,
                 role: user.role
             }
-        })
+        });
     }
     catch(error) {
-res.status(500).json({
-    message: error.message
-});
+        res.status(500).json({
+            message: error.message
+        });
     }
-}
+};
 
 // Login
-
 export const login = async (req, res) => {
     try {
         const {email, password} = req.body;
@@ -71,7 +67,7 @@ export const login = async (req, res) => {
         if(!user) {
             return res.status(400).json({
                 message: "Invalid email or password"
-            })
+            });
         }
         if(!user.isVerified) {
             return res.status(403).json({
@@ -98,14 +94,13 @@ export const login = async (req, res) => {
             token,
             user,
         });
-
     } 
- catch(error) {
-res.status(500).json({
-    message: error.message
-})
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
     }
-}
+};
 
 // To get profile
 export const getMe = async(req,res) => {
@@ -115,18 +110,17 @@ export const getMe = async(req,res) => {
         {
            return res.status(404).json({message: "User not found"});
         }
-        res.json
-        ({
+        res.json({
             success: true,
             user,
         });
     }
     catch(error) {
-res.status(500).json({
-    message: err.message
-});
+        res.status(500).json({
+            message: error.message
+        });
     }
-}
+};
 
 // Verify the email
 export const verifyEmail = async(req,res) => {
@@ -134,7 +128,7 @@ export const verifyEmail = async(req,res) => {
         const {email, code} = req.body;
         if(!email || !code)
         {
-            return res.status(400).json({message: "Email and code are required."})
+            return res.status(400).json({message: "Email and code are required."});
         }
         const user = await User.findOne({email});
         if(!user)
@@ -143,11 +137,11 @@ export const verifyEmail = async(req,res) => {
         }
         if(user.isVerified)
         {
-            return res.status(400).json({message: "Email already verified."})
+            return res.status(400).json({message: "Email already verified."});
         }
         if(user.verificationToken !== code)
         {
-            return res.status(400).json({message: "Invalid verfication code."})
+            return res.status(400).json({message: "Invalid verfication code."});
         }
         user.isVerified = true;
         user.verificationToken = undefined;
@@ -158,12 +152,12 @@ export const verifyEmail = async(req,res) => {
         });
     }
     catch(error) {
-res.status(500).json({
-    message: err.message,
-    success: false
-});
+        res.status(500).json({
+            message: error.message,
+            success: false
+        });
     }
-}
+};
 
 // Forgot Password
 export const forgotPassword = async (req, res) => {
@@ -182,7 +176,7 @@ export const forgotPassword = async (req, res) => {
         user.resetPasswordExpire = resetPasswordExpire;
         await user.save();
 
-        const clientUrl = "http://localhost:5173"; // frontend url
+        const clientUrl = process.env.CLIENT_URL || req.headers.origin || "https://realestate-five-liard.vercel.app";
         const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
         const message = `
             <h2>Password Reset Request</h2>
@@ -207,11 +201,10 @@ export const forgotPassword = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message, success: false });
     }
-};  // for reset password we require the email
+};
 
-// now to reset password
-export const resetPassword = async (req, res) => 
-{
+// Reset Password
+export const resetPassword = async (req, res) => {
     try{
         const {token} = req.params;
         const {password} = req.body;
@@ -239,6 +232,4 @@ export const resetPassword = async (req, res) =>
     catch (err) {
         res.status(500).json({ message: err.message, success: false });
     }
-}
-
-
+};
