@@ -506,7 +506,7 @@ const Landingpage = () => {
             muted
             loop
             playsInline
-            poster="/videos/hero-poster.jpg"
+            poster="/hero-poster.jpg"
             style={{
               position: 'absolute',
               inset: 0,
@@ -517,7 +517,7 @@ const Landingpage = () => {
               willChange: 'transform'
             }}
           >
-            <source src="/videos/hero-realestate.mp4" type="video/mp4" />
+            <source src="/hero-realestate.mp4" type="video/mp4" />
           </video>
         </Parallax>
 
