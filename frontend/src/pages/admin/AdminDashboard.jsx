@@ -5,13 +5,10 @@ import axios from 'axios';
 import API_URL from '../../config';
 import { HiOutlineCheckCircle, HiOutlineLibrary, HiOutlineTicket, HiOutlineUserGroup } from 'react-icons/hi';
 
-// Real Estate Sunset House background image
-const BACKGROUND_IMAGE_URL = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80";
-
 const AdminDashboard = () => {
 
     const [stats, setStats] = useState({
-        totalUsers: 0,
+        totalUsers: 0,        // ✅ Changed from totalUser to totalUsers
         totalProperties: 0,
         activeListings: 0,
         soldProperties: 0,
@@ -28,7 +25,7 @@ const AdminDashboard = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (res.data.success) {
-                    console.log("Stats received:", res.data.stats);
+                    console.log("Stats received:", res.data.stats); // ✅ Debug log
                     setStats(res.data.stats);
                 }
                 setLoading(false);
@@ -51,119 +48,95 @@ const AdminDashboard = () => {
     const statCards = [
         {
             title: "Total Users",
-            value: stats.totalUsers || 0,
+            value: stats.totalUsers || 0,  // ✅ Changed from totalUser to totalUsers
             icon: HiOutlineUserGroup,
-            color: "#2dd4bf",
-            bg: "rgba(45, 212, 191, 0.15)",
-            border: "rgba(45, 212, 191, 0.3)",
+            color: "#0d9488",
+            bg: "#ccfbf1",
         },
         {
             title: "Total Properties",
             value: stats.totalProperties || 0,
             icon: HiOutlineLibrary,
-            color: "#fbbf24",
-            bg: "rgba(251, 191, 36, 0.15)",
-            border: "rgba(251, 191, 36, 0.3)",
+            color: "#f59e0b",
+            bg: "#fef3c7",
         },
         {
             title: "Active Listings",
             value: stats.activeListings || 0,
             icon: HiOutlineTicket,
-            color: "#60a5fa",
-            bg: "rgba(96, 165, 250, 0.15)",
-            border: "rgba(96, 165, 250, 0.3)",
+            color: "#3b82f6",
+            bg: "#dbeafe",
         },
         {
             title: "Sold Properties",
             value: stats.soldProperties || 0,
             icon: HiOutlineCheckCircle,
-            color: "#34d399",
-            bg: "rgba(52, 211, 153, 0.15)",
-            border: "rgba(52, 211, 153, 0.3)",
+            color: "#10b981",
+            bg: "#dcfce7",
         },
     ];
 
     return (
-        <div 
-            className={s.dashboardContainer}
-            style={{ backgroundImage: `url(${BACKGROUND_IMAGE_URL})` }}
-        >
-            {/* Dark Glass Overlay */}
-            <div className={s.overlay}></div>
-
-            <div className={s.contentWrapper}>
-                <div className={s.headerContainer}>
-                    <div>
-                        <h1 className={s.pageTitle}>Admin Overview</h1>
-                        <p className={s.pageSubtitle}>
-                            Welcome back, administrator. Here's today's summary.
-                        </p>
-                    </div>
-                    <button onClick={() => {
-                        setLoading(true);
-                        window.location.reload();
-                    }} className={s.refreshButton}>
-                        Refresh Data
-                    </button>
+        <div className={s.dashboardContainer}>
+            <div className={s.headerContainer}>
+                <div>
+                    <h1 className={s.pageTitle}>Admin Overview</h1>
+                    <p className={s.pageSubtitle}>
+                        Welcome back, administrator. Here's today's summary.
+                    </p>
                 </div>
+                <button onClick={() => {
+                    setLoading(true);
+                    window.location.reload();
+                }} className={s.refreshButton}>
+                    Refresh Data
+                </button>
+            </div>
 
-                <div className={s.statsGrid}>
-                    {statCards.map((card, i) => (
-                        <div 
-                            key={i} 
-                            className={s.statCard}
-                        >
-                            <div 
-                                className={s.statIconContainer} 
-                                style={{ 
-                                    backgroundColor: card.bg,
-                                    border: `1px solid ${card.border}`,
-                                    color: card.color 
-                                }}
-                            >
-                                <card.icon size={26} />
-                            </div>
-                            <div>
-                                <h3 className={s.statTitle}>{card.title}</h3>
-                                <p className={s.statValue}>{card.value}</p>
-                            </div>
+            <div className={s.statsGrid}>
+                {statCards.map((card, i) => (
+                    <div key={i} className={s.statCard} style={{ backgroundColor: card.bg }}>
+                        <div className={s.statIcon} style={{ color: card.color }}>
+                            <card.icon size={24} />
                         </div>
-                    ))}
-                </div>
-
-                <div className={s.secondGrid}>
-                    <div className={s.systemHealthCard}>
-                        <h3 className={s.systemHealthTitle}>System Health</h3>
-                        <div className={s.servicesContainer}>
-                            {["Database", "Media Storage", "Auth Service", "API Gateway"].map((service, i) => (
-                                <div key={i} className={s.serviceItem}>
-                                    <div className={s.serviceName}>{service}</div>
-                                    <div className={s.statusContainer}>
-                                        <span className={s.statusDot}></span>
-                                        <span className={s.statusText}>Online</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className={s.adminToolsCard}>
                         <div>
-                            <h3 className={s.adminToolsTitle}>Admin Tools</h3>
-                            <p className={s.adminToolsDesc}>
-                                Quickly manage platform resources and tasks.
-                            </p>
-                        </div>
-                        <div className={s.adminToolsButtonsContainer}>
-                            <button className={s.adminToolButton}>System Logs</button>
-                            <button className={s.adminToolButton}>DB Backup</button>
-                            <button className={s.adminToolButton}>Settings</button>
+                            <h3 className={s.statTitle}>{card.title}</h3>
+                            <p className={s.statValue}>{card.value}</p>
                         </div>
                     </div>
+                ))}
+            </div>
+
+            <div className={s.secondGrid}>
+                <div className={s.systemHealthCard}>
+                    <h3 className={s.systemHealthTitle}>System Health</h3>
+                    <div className={s.servicesContainer}>
+                        {["Database", "Media Storage", "Auth Service", "API Gateway"].map((service, i) => (
+                            <div key={i} className={s.serviceItem}>
+                                <div className={s.serviceName}>{service}</div>
+                                <div className={s.statusContainer}>
+                                    <span className={s.statusDot}></span>
+                                    <span className={s.statusText}>Online</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <div className={s.adminToolsCard}>
+                <h3 className={s.adminToolsTitle}>Admin Tools</h3>
+                <p className={s.adminToolsDesc}>
+                    Quickly manage platform resources and tasks.
+                </p>
+                <div className={s.adminToolsButtonsContainer}>
+                    <button className={s.adminToolButton}>System Logs</button>
+                    <button className={s.adminToolButton}>DB Backup</button>
+                    <button className={s.adminToolButton}>Settings</button>
                 </div>
             </div>
         </div>
     );
 }
 
-export default AdminDashboard;
+export default AdminDashboard;  
