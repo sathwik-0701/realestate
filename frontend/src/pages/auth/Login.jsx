@@ -28,26 +28,36 @@ const Login = () => {
         setIsLoading(true);
         setError("");
 
-        const result = await login(formData.email, formData.password);
+        try {
+            const result = await login(formData.email, formData.password);
 
-        if(result.success)
-        {
-            const storedUser = JSON.parse(
-                localStorage.getItem("user") || sessionStorage.getItem("user"),
-            );
-            if(storedUser?.role === "admin")
-            {
-               navigate("/admin-dashboard");
-            } else if (storedUser?.role === "seller")
-            {
-                navigate("/dashboard");
-            }  else {
-                navigate("/");
+            if (result && result.success) {
+                const storedUserString = localStorage.getItem("user") || sessionStorage.getItem("user");
+                let storedUser = null;
+                if (storedUserString) {
+                    try {
+                        storedUser = JSON.parse(storedUserString);
+                    } catch (parseErr) {
+                        console.error("Error parsing user data:", parseErr);
+                    }
+                }
+                
+                if (storedUser?.role === "admin") {
+                    navigate("/admin-dashboard");
+                } else if (storedUser?.role === "seller") {
+                    navigate("/dashboard");
+                } else {
+                    navigate("/");
+                }
+            } else {
+                setError(result?.message || "Login failed");
             }
-        } else {
-            setError(result.message);
+        } catch (err) {
+            console.error("Login submission error:", err);
+            setError(err.message || "An unexpected error occurred during login.");
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     return (
