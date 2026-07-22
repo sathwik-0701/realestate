@@ -1,11 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'; // ✅ removed Children from import
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import API_URL from '../config';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercase)
+export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(
         localStorage.getItem("token") || sessionStorage.getItem("token") || null,
@@ -18,10 +18,16 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
             const storedUser =
             localStorage.getItem("user") || sessionStorage.getItem("user");
             if(storedUser) {
-                setUser(JSON.parse(storedUser));
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch (e) {
+                    console.error("Error parsing stored user:", e);
+                    localStorage.removeItem("user");
+                    sessionStorage.removeItem("user");
+                }
             }
         }
-        setLoading(false); // ✅ was missing, loading never became false
+        setLoading(false);
 
         const interceptor = axios.interceptors.response.use(
             (response) => response,
@@ -29,9 +35,13 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
                 if(
                     error.response &&
                     error.response.status === 403 &&
-                    error.response.data.message.includes("blocked")
+                    error.response.data &&
+                    (error.response.data.message || error.response.data.Message)
                 ) {
-                    logout();
+                    const msg = error.response.data.message || error.response.data.Message || "";
+                    if (typeof msg === 'string' && msg.includes("blocked")) {
+                        logout();
+                    }
                 }
                 return Promise.reject(error);
             },
@@ -40,7 +50,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
     }, [token]);
 
     // login
-    const login = async (email, password) => {  // ✅ was (verifyEmailStyles, password)
+    const login = async (email, password) => {
         try {
             const res = await axios.post(`${API_URL}/api/auth/login`, {
                 email,
@@ -59,7 +69,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
         catch (error) {
             return {
                 success: false,
-                message: error.response?.data?.message || "Login failed",  // ✅ was err (not defined)
+                message: error.response?.data?.message || error.response?.data?.Message || "Login failed",
             };
         }
     };
@@ -68,7 +78,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
     const register = async (userData) => {
         try {
             const res = await axios.post(`${API_URL}/api/auth/register`, userData);
-            return {                                   // ✅ return was on separate line causing undefined
+            return {
                 success: true,
                 message: res.data.message
             };
@@ -76,7 +86,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
         catch (error) {
             return {
                 success: false,
-                message: error.response?.data?.message || "Registration failed",  // ✅ was err
+                message: error.response?.data?.message || error.response?.data?.Message || "Registration failed",
             };
         }
     };
@@ -96,7 +106,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
     const refreshUser = async () => {
         if(!token) return;
         try {
-            const res = await axios.get(`${API_URL}/api/user/profile`, {  // ✅ was /api/auth/me (wrong route)
+            const res = await axios.get(`${API_URL}/api/user/profile`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             if(res.data.success) {
@@ -109,7 +119,7 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
             }
         }
         catch (error) {
-            console.error("Failed to refresh the user:", error);  // ✅ was err (not defined)
+            console.error("Failed to refresh the user:", error);
         }
     };
 
@@ -119,12 +129,12 @@ export const AuthProvider = ({ children }) => {  // ✅ was {Children} (uppercas
             setUser,
             token,
             loading,
-            login,        // ✅ was missing from value!
+            login,
             register,
             logout,
             refreshUser,
         }}>
-            {children}    {/* ✅ was {Children} (uppercase - renders nothing) */}
+            {children}
         </AuthContext.Provider>
     );
 };
